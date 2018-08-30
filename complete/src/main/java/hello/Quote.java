@@ -22,6 +22,10 @@ public class Quote {
         this.quote = quote;
     }
 
+    public String getId() {
+        return id;
+    }
+
     public String getCelebrity() {
         return celebrity;
     }

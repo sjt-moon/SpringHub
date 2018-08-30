@@ -1,5 +1,6 @@
 package hello;
 
+import com.sun.org.apache.xpath.internal.operations.Quo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -7,7 +8,6 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Queue;
 
 @Repository
 public class QuoteDALImpl implements QuoteDAL {
@@ -28,6 +28,13 @@ public class QuoteDALImpl implements QuoteDAL {
     @Override
     public List<Quote> findAll() {
         return mongoTemplate.findAll(Quote.class);
+    }
+
+    @Override
+    public Quote findById(String id) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("id").is(id));
+        return mongoTemplate.findOne(query, Quote.class);
     }
 
     @Override
