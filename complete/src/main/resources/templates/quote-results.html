@@ -1,0 +1,9 @@
+<html xmlns:th="http://www.thymeleaf.org">
+    <body>
+        <h1> Congratulations! You have added a new quote into our database. </h1>
+            <h2 th:utext="${qf.celebrity}"></h2>
+            <p th:utext="${qf?.quote}" th:remove="tag"></p>
+        <p></p>
+        <a href="/quote"> submit another quote </a>
+    </body>
+</html>
