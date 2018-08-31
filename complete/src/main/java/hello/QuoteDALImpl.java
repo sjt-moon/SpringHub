@@ -31,6 +31,16 @@ public class QuoteDALImpl implements QuoteDAL {
     }
 
     @Override
+    public boolean exist(Quote quote) {
+        Query query = new Query();
+        query.addCriteria(new Criteria().andOperator(
+                Criteria.where("celebrity").is(quote.getCelebrity()),
+                Criteria.where("quote").is(quote.getQuote())
+        ));
+        return mongoTemplate.exists(query, Quote.class);
+    }
+
+    @Override
     public Quote findById(String id) {
         Query query = new Query();
         query.addCriteria(Criteria.where("id").is(id));

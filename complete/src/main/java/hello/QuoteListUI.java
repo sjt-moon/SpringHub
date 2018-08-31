@@ -68,18 +68,51 @@ public class QuoteListUI extends UI {
         selectButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
     }
 
+    /**
+     * show list of quotes, each with a checkbox & text box
+     */
     private void addQuoteList() {
         quoteList.setWidth("80%");
         layout.addComponent(quoteList);
     }
 
     private void addActionButton() {
+        HorizontalLayout horizontalLayout = new HorizontalLayout();
+        addAddButton(horizontalLayout);
+        addDeleteButton(horizontalLayout);
+        addRefreshButton(horizontalLayout);
+        layout.addComponent(horizontalLayout);
+    }
+
+    /**
+     * button: add a quote
+     */
+    private void addAddButton(HorizontalLayout horizontalLayout) {
+        Button addButton = new Button();
+        addButton.setIcon(FontAwesome.PLUS);
+        addButton.addStyleName(ValoTheme.BUTTON_PRIMARY);
+        addButton.setVisible(true);
+
+        PopupView popupView = new PopupView(null, new AddNewQuoteLayout(quoteDAL));
+        layout.addComponent(popupView);
+
+        horizontalLayout.addComponent(addButton);
+
+        addButton.addClickListener(event -> {
+            popupView.setPopupVisible(true);
+        });
+    }
+
+    /**
+     * button: delete a quote
+     */
+    private void addDeleteButton(HorizontalLayout horizontalLayout) {
         Button deleteButton = new Button();
         deleteButton.setIcon(FontAwesome.REMOVE);
         deleteButton.addStyleName(ValoTheme.BUTTON_PRIMARY);
         deleteButton.setVisible(true);
 
-        layout.addComponent(deleteButton);
+        horizontalLayout.addComponent(deleteButton);
 
         deleteButton.addClickListener(event -> {
             quoteList.getQuoteLayoutList().stream().filter(QuoteLayout::getCheckBoxValue).forEach(x -> {
@@ -87,5 +120,19 @@ public class QuoteListUI extends UI {
             });
             quoteList.update();
         });
+    }
+
+    /**
+     * button: refresh
+     */
+    private void addRefreshButton(HorizontalLayout horizontalLayout) {
+        Button refreshButton = new Button();
+        refreshButton.setIcon(FontAwesome.REFRESH);
+        refreshButton.addStyleName(ValoTheme.BUTTON_PRIMARY);
+        refreshButton.setVisible(true);
+
+        horizontalLayout.addComponent(refreshButton);
+
+        refreshButton.addClickListener(event -> quoteList.update());
     }
 }

@@ -29,7 +29,7 @@ class QuoteLayout extends HorizontalLayout {
 
         /*
         * YOU NEED TO BIND TO A COMPONENT, OTHERWISE NOTHING COULD BE RENDERED */
-        binder.forField(text).bind(Quote::getQuote, Quote::setQuote);
+        binder.forField(text).bind(Quote::toString, Quote::setQuote);
 
         addComponents(done, text);
         setExpandRatio(text, 1);

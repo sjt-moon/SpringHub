@@ -12,6 +12,8 @@ public interface QuoteDAL {
 
     List<Quote> findAll();
 
+    boolean exist(Quote quote);
+
     Quote findById(String id);
 
     Quote findOneByCelebrity(String celebrity);

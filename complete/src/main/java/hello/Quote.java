@@ -44,7 +44,6 @@ public class Quote {
 
     @Override
     public String toString() {
-        return celebrity + " said:\n"
-                + "\t " + quote;
+        return quote + "\t-- " + celebrity;
     }
 }
