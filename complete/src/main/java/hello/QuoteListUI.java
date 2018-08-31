@@ -1,5 +1,6 @@
 package hello;
 
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
@@ -22,7 +23,7 @@ public class QuoteListUI extends UI {
     protected void init(VaadinRequest vaadinRequest) {
         setupLayout();
         addHeader();
-        addForm();
+        searchForm();
         addQuoteList();
         addActionButton();
     }
@@ -40,30 +41,51 @@ public class QuoteListUI extends UI {
         layout.addComponent(header);
     }
 
-    private void addForm() {
+    /**
+     * input text & search quotes for that celebrity (input str)
+     */
+    private void searchForm() {
         HorizontalLayout formLayout = new HorizontalLayout();
         formLayout.setSpacing(true);
         formLayout.setWidth("80%");
 
         TextField textField = new TextField();
         textField.setWidth("100%");
+        textField.setValue("select which celebrity you are searching for XD");
 
-        Button addButton = new Button("");
-        addButton.setIcon(FontAwesome.PLUS);
-        addButton.addStyleName(ValoTheme.BUTTON_PRIMARY);
+        Button selectButton = new Button("");
+        selectButton.setIcon(FontAwesome.SEARCH);
+        selectButton.addStyleName(ValoTheme.BUTTON_PRIMARY);
 
-        formLayout.addComponents(textField, addButton);
+        formLayout.addComponents(textField, selectButton);
         formLayout.setExpandRatio(textField, 1);
         layout.addComponent(formLayout);
+
+        /*
+        * select all the quotes for that celebrity */
+        selectButton.addClickListener(click -> quoteList.setQuotes(quoteDAL.findAllByCelebrity(textField.getValue())));
+
+        selectButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
     }
 
     private void addQuoteList() {
-        System.out.println("add Quote List");
-
         quoteList.setWidth("80%");
         layout.addComponent(quoteList);
     }
 
     private void addActionButton() {
+        Button deleteButton = new Button();
+        deleteButton.setIcon(FontAwesome.REMOVE);
+        deleteButton.addStyleName(ValoTheme.BUTTON_PRIMARY);
+        deleteButton.setVisible(true);
+
+        layout.addComponent(deleteButton);
+
+        deleteButton.addClickListener(event -> {
+            quoteList.getQuoteLayoutList().stream().filter(QuoteLayout::getCheckBoxValue).forEach(x -> {
+                quoteDAL.delete(x.getQuote());
+            });
+            quoteList.update();
+        });
     }
 }
